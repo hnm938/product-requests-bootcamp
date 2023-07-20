@@ -6,7 +6,7 @@ This is a SQL Node.JS CLI application,
 made for the UofT Bootcamp module 13.
 
 Most people starting any kind of business need 
-a database to store important information, this apps
+a database to store important information, this app
 allows the user to view, create, update and delete JSON
 information in a SQL database.
 
@@ -44,13 +44,13 @@ information in a SQL database.
 ```
 
 #### Create Database
-##### Login to database account
+##### Login to a database account
 
 ```bash
-mysql -u root -p
+mysql -u your_username -p
 ```
 
-##### Drop and Create new table
+##### Drop and Create a new table
 
 ```bash
 DROP DATABASE IF EXISTS ecommerce_db;
@@ -61,6 +61,13 @@ CREATE DATABASE ecommerce_db;
 ```
 
 #### Update .env file with database information.
+```
+// /.env
+DB_NAME='your_database_name'
+DB_USER='your_username'
+DB_PW='your_password'
+
+```
 
 #### Run the application
 
