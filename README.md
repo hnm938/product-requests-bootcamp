@@ -66,7 +66,6 @@ CREATE DATABASE ecommerce_db;
 DB_NAME='your_database_name'
 DB_USER='your_username'
 DB_PW='your_password'
-
 ```
 
 #### Run the application
