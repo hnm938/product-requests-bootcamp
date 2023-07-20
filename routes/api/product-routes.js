@@ -77,6 +77,60 @@ router.post('/', (req, res) => {
 });
 
 // update product
+router.put("/:id", async (req, res) => {
+  const productId = req.params.id;
+  const { product_name, price, stock, category_id, tagIds } = req.body;
+
+  try {
+    // Update the product
+    await Product.update(
+      { product_name, price, stock, category_id },
+      {
+        where: {
+          id: productId,
+        },
+      }
+    );
+
+    // Update the associated category
+    await Category.update(
+      { category_name: category_id }, // Use category_id here instead of category
+      {
+        where: {
+          id: category_id,
+        },
+      }
+    );
+
+    // Update the associated tags
+    await ProductTag.destroy({
+      where: {
+        product_id: productId,
+      },
+    });
+
+    const productTagIdArr = tagIds.map((tag_id) => {
+      return {
+        product_id: productId,
+        tag_id,
+      };
+    });
+
+    await ProductTag.bulkCreate(productTagIdArr);
+
+    // Find the updated product and include its associated Category and Tag data
+    const updatedProductWithAssociations = await Product.findByPk(productId, {
+      include: [{ model: Category }, { model: Tag, through: ProductTag }],
+    });
+
+    // Send the updated product with its associations as a response
+    res.status(200).json(updatedProductWithAssociations);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: `${err}` });
+  }
+});
+
 router.post("/", (req, res) => {
   /* req.body should look like this...
     {

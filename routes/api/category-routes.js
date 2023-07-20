@@ -20,9 +20,35 @@ router.get('/', (req, res) => {
     });
 });
 
-router.get('/:id', (req, res) => {
-  // find one category by its `id` value
-  // be sure to include its associated Products
+router.get("/:id", (req, res) => {
+  const categoryId = req.params.id;
+
+  // Find one category by its `id` value and include its associated Products
+  Category.findOne({
+    where: {
+      id: categoryId,
+    },
+    include: [
+      {
+        model: Product,
+        attributes: ["id", "product_name", "price", "stock"],
+      },
+    ],
+  })
+    .then((category) => {
+      if (category) {
+        // If the category is found, send a success response with the category data and its associated Products
+        res.status(200).json(category);
+      } else {
+        // If the category is not found, send a not found response
+        res.status(404).json({ message: "Category not found" });
+      }
+    })
+    .catch((err) => {
+      // Handle any errors that occur during the query
+      console.error(err);
+      res.status(500).json({ message: "Internal server error" });
+    });
 });
 
 router.post('/', (req, res) => {
